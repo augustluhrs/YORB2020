@@ -90,6 +90,7 @@ class Scene {
 		this.createMaterials();
 		this.loadBackground();
 		this.loadFloorModel();
+		this.loadPetModels();
 
 		this.setupSpringShow();
 
@@ -346,6 +347,68 @@ class Scene {
 		this.loadModel('models/itp/walls.glb', this.wallMaterial, scaleFactor, true, false, true);
 		this.loadModel('models/itp/window-shelf.glb', this.windowShelfMaterial, scaleFactor, true, false);
 		this.loadModel('models/itp/wooden-bar.glb', this.floorMaterial, scaleFactor, true, true, true);
+	}
+
+	// loadPetModel(_file, _material, _scale, _castShadow, _receiveShadow, _collidable = false) {
+	// 	this.GLTFLoader.load(_file, (gltf) => {
+	// 		let scene = gltf.scene;
+	// 		scene.position.set(0, 0, 0);
+	// 		scene.scale.set(_scale, _scale, _scale);
+	// 		scene.traverse((child) => {
+	// 			if (child.isMesh) {
+	// 				child.material = _material;
+	// 				child.castShadow = _castShadow;
+	// 				child.receiveShadow = _receiveShadow;
+	// 				if (_collidable) {
+	// 					this.collidableMeshList.push(child);
+	// 				}
+	// 			}
+	// 		});
+	// 		this.scene.add(scene);
+	// 		let name = _file.slice(11, _file.indexOf("."));
+	// 		scene.name = name;
+	// 		this.floorModelParts.push(scene);
+	// 	}, undefined, function (e) {
+	// 		console.error(e);
+	// 	});
+	// }
+
+	loadPetModels(){
+		console.log('loading pets');
+		//not declaring new GLTF because happens after loadFloorModel() 
+		// this.GLTFLoader = new THREE.GLTFLoader();
+		// let scaleFactor = 1.25;
+		this.pets = [];
+		// this.matMode = 0;
+
+		// this.loadPetModel('models/ITPets/skateDog.gltf',)
+
+		
+		//model from https://sketchfab.com/3d-models/dog-c1d790c39dcf4ba2a9a47b4c0dc8836b
+		//thanks to u/HeyNinety!
+		let petLoader = new THREE.GLTFLoader().setPath('models/ITPets/');
+		petLoader.load('skateDog.gltf', (gltf)=>{
+			let scene = gltf.scene;
+			scene.position.set(-20, .5, 0); //trying to put in elevator bank for now
+			scene.rotation.set(0, -90, 0);
+			scene.scale.set(.5, .5, .5);
+			scene.traverse((child)=>{
+				if (child.isMesh){
+					// child.material ??
+					child.castShadow = true;
+					child.receiveShadow = true;
+					this.collidableMeshList.push(child);					
+				}
+			});
+			this.scene.add(scene);
+			let name = "skate dog";
+			scene.name = name;
+			this.pets.push(scene);
+		}, (xhr)=>{
+			console.log("dog " + (xhr.loaded/xhr.total * 100) + "% loaded");
+		},(error)=>{
+			console.log('error in pet load');
+		});
 	}
 
 	swapMaterials() {
