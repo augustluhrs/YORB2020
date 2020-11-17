@@ -14,6 +14,7 @@ import {
 import { SpringShow } from "./springShow2020";
 import {ITPModel } from "./ITPModel";
 import {Sketches} from "./Sketches";
+import {Days} from "./100Days";
 
 const THREE = require("./libs/three.min.js");
 const Stats = require("./libs/stats.min.js");
@@ -142,8 +143,12 @@ class Scene extends EventEmitter {
 		this.addLights();
 		this.setupCollisionDetection();
 
-		this.loadBackground();
+    this.loadBackground();
+    
 
+    //100 Days setup
+    this.days = new Days(this.scene, this.camera, this.controls);
+    this.days.setup();
 
 		this.projectionScreens = {}; // object to store projector screens
 		this.createProjectorScreens();
