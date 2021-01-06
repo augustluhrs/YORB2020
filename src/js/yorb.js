@@ -17,6 +17,7 @@ import { ProjectionScreens } from './projectionScreens'
 import { YorbControls2 } from './yorbControls2.js'
 import { Yorblet } from './yorblet.js'
 import { PhotoGallery } from './photoGallery'
+import { DaysGallery } from './100Days'
 
 import * as THREE from 'three'
 
@@ -24,10 +25,12 @@ const Stats = require('./libs/stats.min.js')
 
 // set whether we are a YORBLET or YORB based on hostname:
 const hostname = window.location.hostname
-let MODE = 'YORBLET'
-if (hostname === "yorb.itp.io"){
-    MODE = "YORB";
-}
+// let MODE = 'YORBLET'
+// if (hostname === "yorb.itp.io"){
+//     MODE = "YORB";
+// }
+let MODE = 'YORB' //just for local testing
+
 
 import debugModule from 'debug'
 
@@ -135,7 +138,7 @@ export class Yorb {
     //==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//
     //==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//==//
     // add YORB parts
-    addYORBParts() {
+    async addYORBParts() {
         this.controls = new YorbControls2(this.scene, this.camera, this.renderer)
 
         this.projectionScreens = new ProjectionScreens(this.scene, this.camera, this.mouse)
@@ -151,8 +154,11 @@ export class Yorb {
             this.show = new WinterShow2020(this.scene, this.camera, this.controls, this.mouse)
             this.show.setup()
             this.itpModel = new ITPModel(this.scene)
-
             this.photoGallery = new PhotoGallery(this.scene);
+            this.daysGallery = new DaysGallery(this.scene, "outside"); 
+            // this.daysGallery.setupTest();
+            this.daysGallery.setupGrid();
+
         }
 
         // this.sketches = new Sketches(this.scene)
